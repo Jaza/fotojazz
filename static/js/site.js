@@ -1,0 +1,2 @@
+var fotojazz = fotojazz || {};
+

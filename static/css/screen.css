@@ -1,0 +1,47 @@
+/* HTML elements */
+
+body {
+  background-color: #636363;
+  font-family: Arial, Helvetica, Verdana, sans-serif;
+}
+h1#site-name a, p#site-name a {
+  color: #000;
+  text-decoration: none;
+}
+
+
+
+/* Structure */
+
+#wrapper {
+  background-color: #fff;
+}
+
+
+
+/* Header */
+
+#header {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+#logo {
+  width: 100px;
+  height: 100px;
+  float: left;
+  margin-right: 10px;
+}
+#slogan {
+  font-style: italic;
+}
+
+
+
+/* Footer */
+
+#footer {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

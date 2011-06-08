@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block wrapper %}
+<div id="header" class="grid_12">
+    <div id="logo">
+      <a href="{{ url_for('fotojazz.home') }}" title="{{ config.SITE_NAME }}"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="{{ config.SITE_NAME }}" width="100" height="100" /></a>
+    </div><!-- /#logo -->
+    
+    <{% if request.path == '/' %}h1{% else %}div{% endif %} id="site-name"><a href="{{ url_for('fotojazz.home') }}">{{ config.SITE_NAME }}</a></{% if request.path == '/' %}h1{% else %}div{% endif %}>
+    
+    <div id="slogan">
+      <p>Nifty tool</p>
+    </div><!-- /#slogan -->
+    
+    <div class="clear"></div>
+</div><!-- /#header -->
+
+<div class="clear"></div>
+
+{% block main %}{% endblock main %}
+
+<div id="footer" class="grid_12">
+Cooh, eh?</div><!-- /#footer -->
+<div class="clear"></div>
+
+{% endblock wrapper %}

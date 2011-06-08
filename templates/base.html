@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>{% block head_title %}{{ config.SITE_NAME }}{% endblock %}{% if request.path != '/' %} | {{ config.SITE_NAME }}{% endif %}</title>
+    
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="imagetoolbar" content="no" />
+	<link rel="shortcut icon" href="/favicon.ico" />
+    
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}" type="text/css" media="screen" charset="utf-8" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/960.css') }}" type="text/css" media="screen" charset="utf-8" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/screen.css') }}" type="text/css" media="screen" charset="utf-8" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}" type="text/css" media="print" charset="utf-8" />
+    {% block extra_css %}{% endblock %}
+    
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/site.js') }}"></script>
+
+    {# not using IE css for now #}
+	{# <!--[if lte IE 7]> #}
+	{# <link rel="stylesheet" href="{{ url_for('static', filename='css/lte-ie7.css') }}" type="text/css" media="screen" charset="utf-8" /> #}
+	{# <![endif]--> #}
+	{# <!--[if lte IE 6]> #}
+	{# <link rel="stylesheet" href="{{ url_for('static', filename='css/lte-ie6.css') }}" type="text/css" media="screen" charset="utf-8" /> #}
+    {# <![endif]--> #}
+    
+    <!--[if lte IE 6]>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/supersleight.min.js') }}"></script>
+	<![endif]-->
+    {% block extra_js %}{% endblock %}
+</head>
+<body>
+	<div id="wrapper" class="container_12">
+        {% block wrapper %}{% endblock %}
+	</div><!-- /#wrapper -->
+</body>
+</html>
