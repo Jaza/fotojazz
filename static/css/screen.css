@@ -8,6 +8,13 @@ h1#site-name a, p#site-name a {
   color: #000;
   text-decoration: none;
 }
+label {
+  display: block;
+}
+input[type=text] {
+  border: 1px solid #636363;
+  padding: 5px;
+}
 
 
 
@@ -33,6 +40,20 @@ h1#site-name a, p#site-name a {
 }
 #slogan {
   font-style: italic;
+}
+
+
+
+/* Main page */
+
+#filebrowse input[type=text] {
+  width: 97.5%;
+  margin: 10px 0;
+}
+#filebrowse-display {
+  background-color: #cc9;
+  padding: 10px;
+  border: 1px solid #636363;
 }
 
 

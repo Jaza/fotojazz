@@ -1,9 +1,22 @@
 {% extends 'base_site.html' %}
 
 {% block main %}
-<div id="main" class="grid_12">
+<div id="filebrowse" class="grid_6">
+  <form action="/" method="post">
+    <label for="id_path">Path to folder:</label>
+    <input id="id_path" type="text" name="path" maxlength="255" size="60" value="{{ filebrowse_path }}" />
+    
+    <div id="filebrowse-display">
+    {% if filebrowse_error %}
+      {{ filebrowse_error }}
+    {% endif %}
+    </div><!-- /#filebrowse-display -->
+  </form>
+</div><!-- /#filebrowse -->
+
+<div id="operations" class="grid_6">
   <p>Aloha!</p>
-</div><!-- /#main -->
+</div><!-- /#operations -->
 
 <div class="clear"></div>
 {% endblock main %}
