@@ -24,8 +24,11 @@ def home():
     
     if len(sys.argv) > 1:
         filebrowse_path = sys.argv[1]
+        suffix = '/'
+        if filebrowse_path.endswith('/'):
+            suffix = ''
         filebrowse_path = '%s%s' % (filebrowse_path,
-                                    filebrowse_path.endswith('/') and '' or '/')
+                                     suffix)
     
     filebrowse_files = []
     filebrowse_error = ''
@@ -36,11 +39,8 @@ def home():
                                    '*.[jJ][pP]*[gG]')
         filenames =  glob(glob_pattern)
         for filename in filenames:
-            fp = open(filename, 'rb')
-            img = Image.open(fp)
-            img.load()
+            img = Image.open(filename)
             width, height = img.size
-            fp.close()
             ratio = 1.0 * width / height
             if ratio > 1.0:
                 new_width = resize_width
@@ -53,8 +53,8 @@ def home():
                 new_height = resize_height
             filebrowse_files.append({'filename': os.path.basename(filename),
                                      'fullname': filename,
-                                     'width': new_width,
-                                     'height': new_height})
+                                     'width': int(new_width),
+                                     'height': int(new_height)})
         
         if not filebrowse_files:
             filebrowse_error = 'No images in specified directory.'
@@ -85,9 +85,9 @@ def thumb():
     if not file:
         raise NotFound()
     
-    width = request.args.get('width', 100)
-    height = request.args.get('height', 100)
-    quality = request.args.get('quality', 75)
+    width = int(request.args.get('width', 100))
+    height = int(request.args.get('height', 100))
+    quality = int(request.args.get('quality', 75))
     crop = request.args.get('crop', False)
 
     out = resize(file=file,

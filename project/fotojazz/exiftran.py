@@ -1,4 +1,5 @@
 from glob import glob
+import sys
 from subprocess import Popen, PIPE
 from threading import Thread
 from time import sleep
@@ -73,7 +74,17 @@ def exiftran_test_run():
     """Example / test of running an ExifTran instance, and of monitoring
     its progress from outside the thread."""
     
-    filenames_input = glob('/home/jaza/tempphotos_testing/*.[jJ][pP]*[gG]')
+    if not len(sys.argv) > 1:
+        print 'Error: no file path specified.'
+        exit()
+    
+    filebrowse_path = sys.argv[1]
+    suffix = '/'
+    if filebrowse_path.endswith('/'):
+        suffix = ''
+    filebrowse_path = '%s%s' % (filebrowse_path,
+                                     suffix)
+    filenames_input = glob('%s*.[jJ][pP]*[gG]' % filebrowse_path)
 
     et = ExifTran(filenames_input)
 

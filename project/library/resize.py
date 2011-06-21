@@ -27,9 +27,7 @@ def resize(file, width, height, crop, quality=75):
     
     @return out: file-like-object - save the image into the output stream
     '''
-    fp = open(file, 'rb')
-    img = Image.open(fp)
-    img.load()
+    img = Image.open(file)
     #preresize image with factor 2, 4, 8 and fast algorithm
     factor = 1
     while img.size[0] / factor > 2 * width and img.size[1] * 2 / factor > 2 * height:
@@ -58,6 +56,5 @@ def resize(file, width, height, crop, quality=75):
     # Save it into a file-like object
     out = StringIO()
     img.save(out, "JPEG", quality=75)
-    fp.close()
     
     return out
