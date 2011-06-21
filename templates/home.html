@@ -10,6 +10,17 @@
     {% if filebrowse_error %}
       {{ filebrowse_error }}
     {% endif %}
+    
+    {% if filebrowse_files %}
+      {% for filebrowse_file in filebrowse_files %}
+        <div class="filebrowse-image{{ loop.cycle('', '', '', ' filebrowse-image-right') }}">
+          <img src="{{ url_for('thumb', file=filebrowse_file.fullname, width=resize_width, height=resize_height) }}" width="{{ filebrowse_file.width }}" height="{{ filebrowse_file.height }}" />
+          <input type="checkbox" id="filebrowse_image_{{ filebrowse_file.filename }}" value="{{ filebrowse_file.filename }}" name="filebrowse_files" checked="checked" />
+        </div><!-- /.filebrowse-image -->
+      {% endfor %}
+      
+      <div class="clear"></div>
+    {% endif %}{# filebrowse_files #}
     </div><!-- /#filebrowse-display -->
   </form>
 </div><!-- /#filebrowse -->

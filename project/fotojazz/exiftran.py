@@ -73,7 +73,7 @@ def exiftran_test_run():
     """Example / test of running an ExifTran instance, and of monitoring
     its progress from outside the thread."""
     
-    filenames_input = glob('/home/jaza/tempphotos_testing/*.[jJ][pP]?[gG]')
+    filenames_input = glob('/home/jaza/tempphotos_testing/*.[jJ][pP]*[gG]')
 
     et = ExifTran(filenames_input)
 

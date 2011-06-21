@@ -15,6 +15,9 @@ input[type=text] {
   border: 1px solid #636363;
   padding: 5px;
 }
+img {
+  display: block;
+}
 
 
 
@@ -54,6 +57,16 @@ input[type=text] {
   background-color: #cc9;
   padding: 10px;
   border: 1px solid #636363;
+}
+.filebrowse-image {
+  width: 100px;
+  height: 100px;
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.filebrowse-image-right {
+  margin-right: 0;
 }
 
 
