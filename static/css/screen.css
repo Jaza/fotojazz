@@ -64,9 +64,19 @@ img {
   float: left;
   margin-right: 10px;
   margin-bottom: 10px;
+  position: relative;
 }
 .filebrowse-image-right {
   margin-right: 0;
+}
+.filebrowse-image img {
+  position: absolute;
+}
+.filebrowse-image input {
+  position: absolute;
+  top: 45px;
+  left: 45px;
+  z-index: 1;
 }
 
 

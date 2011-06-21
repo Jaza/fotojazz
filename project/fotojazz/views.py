@@ -28,7 +28,7 @@ def home():
         if filebrowse_path.endswith('/'):
             suffix = ''
         filebrowse_path = '%s%s' % (filebrowse_path,
-                                     suffix)
+                                    suffix)
     
     filebrowse_files = []
     filebrowse_error = ''
@@ -42,19 +42,25 @@ def home():
             img = Image.open(filename)
             width, height = img.size
             ratio = 1.0 * width / height
+            top_offset = 0
+            left_offset = 0
             if ratio > 1.0:
                 new_width = resize_width
                 new_height = resize_height * (1.0 / ratio)
+                top_offset = int((resize_height - new_height) / 2)
             elif ratio < 1.0:
                 new_width = resize_width * ratio
                 new_height = resize_height
+                left_offset = int((resize_width - new_width) / 2)
             else:
                 new_width = resize_width
                 new_height = resize_height
             filebrowse_files.append({'filename': os.path.basename(filename),
                                      'fullname': filename,
                                      'width': int(new_width),
-                                     'height': int(new_height)})
+                                     'height': int(new_height),
+                                     'top_offset': top_offset,
+                                     'left_offset': left_offset})
         
         if not filebrowse_files:
             filebrowse_error = 'No images in specified directory.'
