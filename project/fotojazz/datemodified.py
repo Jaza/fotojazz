@@ -1,26 +1,22 @@
 #!./bin/python
 
 from glob import glob
-import sys
-from subprocess import Popen, PIPE
+from os import path, utime
 from threading import Thread
-from time import sleep
+import sys
+from time import mktime, sleep
+
+import pyexiv2
 
 
-class ExifTran(Thread):
-    """Calls the command-line exiftran utility within a thread, and
-    streams its shell output (which is one line for each file
-    processed). Calling code can then monitor the progress of ExifTran
-    from outside the thread."""
-    
-    cmd_with_placeholders = 'exiftran -aip %s'
-    filenames_str = ''
+class DateModified(Thread):
     filenames = []
+    filenames_str = ''
     total_file_count = 0
     
     # This number is updated continuously as the thread runs.
     # Check the value of this number to determine the current progress
-    # of exiftran (if it equals 0, progress is 0%; if it equals
+    # of DateModified (if it equals 0, progress is 0%; if it equals
     # total_file_count, progress is 100%).
     files_processed_count = 0
     
@@ -34,25 +30,21 @@ class ExifTran(Thread):
         self.prepare_filenames()
         self.files_processed_count = 0
     
-    """Invokes exiftran on the command line, and reads each line of its
-    shell output until it's finished execution. This process effectively
+    """Changes the date modified to match the Exif date taken, for all
+    images in the specified file path. This process effectively
     halts further progress of the program, which is why it's contained
     in a thread. Continuously updates the value of
     files_processed_count."""
     def run(self):
         self.prepare_filenames()
-        cmd = self.cmd_with_placeholders % self.filenames_str
-        p = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE).stderr
         
-        while 1:
-            line = p.readline()
-            if not line: break
-            # Unfortunately, exiftran dumps progress info as well as
-            # error and other messages to stderr. So, we just inspect
-            # each line manually: if it begins with 'processing ',
-            # it's the latest progress update; otherwise, it's an error
-            # or some other message, and we ignore it.
-            if line.startswith('processing '): self.files_processed_count += 1
+        for filename in self.filenames:
+            metadata = pyexiv2.ImageMetadata(filename)
+            metadata.read()
+            date_taken = metadata['Exif.Photo.DateTimeOriginal'].value
+            date_taken_timestamp = int(mktime(date_taken.timetuple()))
+            utime(filename, (date_taken_timestamp, date_taken_timestamp))
+            self.files_processed_count += 1
     
     """Prepares the string and the list of filenames - this is always
     run before the thread begins."""
@@ -72,8 +64,8 @@ class ExifTran(Thread):
         return '%d files (%.2f%%)' % (self.files_processed_count, percent_done)
 
 
-def exiftran_test_run():
-    """Example / test of running an ExifTran instance, and of monitoring
+def datemodified_test_run():
+    """Example / test of running a DateModified instance, and of monitoring
     its progress from outside the thread."""
     
     if not len(sys.argv) > 1:
@@ -86,23 +78,32 @@ def exiftran_test_run():
         suffix = ''
     filebrowse_path = '%s%s' % (filebrowse_path,
                                 suffix)
+    
+    if not path.isdir(filebrowse_path):
+        print 'Error: invalid file path.'
+        exit()
+    
     filenames_input = glob('%s*.[jJ][pP]*[gG]' % filebrowse_path)
+    
+    if not filenames_input:
+        print 'Error: no matching files in specified path.'
+        exit()
 
-    et = ExifTran(filenames_input)
+    dm = DateModified(filenames_input)
 
-    print '%d files' % et.total_file_count
-    print et.get_progress()
+    print '%d files' % dm.total_file_count
+    print dm.get_progress()
 
-    et.start()
+    dm.start()
 
-    while et.is_alive() and et.files_processed_count < et.total_file_count:
+    while dm.is_alive() and dm.files_processed_count < dm.total_file_count:
         sleep(1)
-        if et.files_processed_count < et.total_file_count:
-            print et.get_progress()
+        if dm.files_processed_count < dm.total_file_count:
+            print dm.get_progress()
 
-    if et.files_processed_count == et.total_file_count:
-        print et.get_progress()
+    if dm.files_processed_count == dm.total_file_count:
+        print dm.get_progress()
 
 
 if __name__ == '__main__':
-    exiftran_test_run()    
+    datemodified_test_run()    

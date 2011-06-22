@@ -57,12 +57,13 @@ def favicon():
                                'favicon.ico')
 
 
-# Code borrowed from:
-# http://flask.pocoo.org/mailinglist/ \
-# archive/2011/1/26/pil-to-create-thumbnails- \
-# automatically-using-tag/#32aff91e05ba9985a49a76a4fb5338d7
 @mod.route("/thumb")
 def thumb():
+    '''Code borrowed (with modifications) from:
+    http://flask.pocoo.org/mailinglist/ \
+    archive/2011/1/26/pil-to-create-thumbnails- \
+    automatically-using-tag/#32aff91e05ba9985a49a76a4fb5338d7'''
+    
     file = request.args.get('file', None)
     
     if not file:

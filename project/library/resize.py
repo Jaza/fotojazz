@@ -2,12 +2,13 @@ import Image
 from StringIO import StringIO
 
 
-# Code borrowed from:
-# http://flask.pocoo.org/mailinglist/ \
-# archive/2011/1/26/pil-to-create-thumbnails- \
-# automatically-using-tag/#32aff91e05ba9985a49a76a4fb5338d7
 def resize(file, width, height, crop, quality=75):
-    '''Downsample the image.
+    '''Code borrowed (with modifications) from:
+    http://flask.pocoo.org/mailinglist/ \
+    archive/2011/1/26/pil-to-create-thumbnails- \
+    automatically-using-tag/#32aff91e05ba9985a49a76a4fb5338d7
+    
+    Downsample the image.
 
     script example :
      >>> import Image, os, sys
