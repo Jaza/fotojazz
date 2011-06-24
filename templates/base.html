@@ -16,6 +16,7 @@
     
 	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/site.js') }}"></script>
+    <script type="text/javascript">var SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
 
     {# not using IE css for now #}
 	{# <!--[if lte IE 7]> #}

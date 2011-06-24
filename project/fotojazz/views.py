@@ -3,6 +3,7 @@ from os import path
 import sys
 
 from flask import current_app as app
+from flask import jsonify
 from flask import Module
 from flask import render_template
 from flask import request
@@ -12,6 +13,7 @@ from werkzeug.exceptions import NotFound
 
 from project.library.resize import resize
 
+from exiftran import ExifTran
 from utils import add_trailing_slash, get_thumb_metadata
 
 
@@ -51,13 +53,21 @@ def home():
                                         thumb_resize_height=thumb_resize_height)
 
 
+@mod.route('/reorient/')
+def reorient():
+    filenames_input = request.args.get('filenames_input', '', type=str)
+    et = ExifTran(filenames_str=filenames_input)
+    et.start()
+    return jsonify(percent=0)
+
+
 @mod.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico')
 
 
-@mod.route("/thumb")
+@mod.route("/thumb/")
 def thumb():
     '''Code borrowed (with modifications) from:
     http://flask.pocoo.org/mailinglist/ \
