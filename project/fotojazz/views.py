@@ -69,8 +69,8 @@ def thumb():
     if not file:
         raise NotFound()
     
-    width = int(request.args.get('width', app.config['THUMB_RESIZE_WIDTH']))
-    height = int(request.args.get('height', app.config['THUMB_RESIZE_HEIGHT']))
+    width = request.args.get('width', app.config['THUMB_RESIZE_WIDTH'], type=int)
+    height = request.args.get('height', app.config['THUMB_RESIZE_HEIGHT'], type=int)
     quality = int(request.args.get('quality', 75))
     crop = request.args.get('crop', False)
 

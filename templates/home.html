@@ -1,33 +1,35 @@
 {% extends 'base_site.html' %}
 
 {% block main %}
+<form action="/" method="post">
 <div id="filebrowse" class="grid_6">
-  <form action="/" method="post">
-    <label for="id_path">Path to folder:</label>
-    <input id="id_path" type="text" name="path" maxlength="255" size="60" value="{{ filebrowse_path }}" />
+  <label for="id_path">Path to folder:</label>
+  <input id="id_path" type="text" name="path" maxlength="255" size="60" value="{{ filebrowse_path }}" />
+  
+  <div id="filebrowse-display">
+  {% if filebrowse_error %}
+    {{ filebrowse_error }}
+  {% endif %}
+  
+  {% if filebrowse_files %}
+    {% for filebrowse_file in filebrowse_files %}
+      <div class="filebrowse-image{{ loop.cycle('', '', '', ' filebrowse-image-right') }}">
+        <label for="filebrowse_image_{{ filebrowse_file.filename }}"><img src="{{ url_for('thumb', file=filebrowse_file.fullname, width=thumb_resize_width, height=thumb_resize_height) }}" width="{{ filebrowse_file.thumb_width }}" height="{{ filebrowse_file.thumb_height }}"{% if filebrowse_file.top_offset %} style="top: {{ filebrowse_file.top_offset }}px"{% endif %}{% if filebrowse_file.left_offset %} style="left: {{ filebrowse_file.left_offset }}px"{% endif %} /></label>
+        <input type="checkbox" id="filebrowse_image_{{ filebrowse_file.filename }}" value="{{ filebrowse_file.filename }}" name="filebrowse_files" checked="checked" />
+      </div><!-- /.filebrowse-image -->
+    {% endfor %}
     
-    <div id="filebrowse-display">
-    {% if filebrowse_error %}
-      {{ filebrowse_error }}
-    {% endif %}
-    
-    {% if filebrowse_files %}
-      {% for filebrowse_file in filebrowse_files %}
-        <div class="filebrowse-image{{ loop.cycle('', '', '', ' filebrowse-image-right') }}">
-          <label for="filebrowse_image_{{ filebrowse_file.filename }}"><img src="{{ url_for('thumb', file=filebrowse_file.fullname, width=thumb_resize_width, height=thumb_resize_height) }}" width="{{ filebrowse_file.thumb_width }}" height="{{ filebrowse_file.thumb_height }}"{% if filebrowse_file.top_offset %} style="top: {{ filebrowse_file.top_offset }}px"{% endif %}{% if filebrowse_file.left_offset %} style="left: {{ filebrowse_file.left_offset }}px"{% endif %} /></label>
-          <input type="checkbox" id="filebrowse_image_{{ filebrowse_file.filename }}" value="{{ filebrowse_file.filename }}" name="filebrowse_files" checked="checked" />
-        </div><!-- /.filebrowse-image -->
-      {% endfor %}
-      
-      <div class="clear"></div>
-    {% endif %}{# filebrowse_files #}
-    </div><!-- /#filebrowse-display -->
-  </form>
+    <div class="clear"></div>
+  {% endif %}{# filebrowse_files #}
+  </div><!-- /#filebrowse-display -->
 </div><!-- /#filebrowse -->
 
 <div id="operations" class="grid_6">
-  <p>Aloha!</p>
+  <div class="operation">
+    <input type="submit" value="Fix orientation" />
+  </div><!-- /#operation -->
 </div><!-- /#operations -->
+</form>
 
 <div class="clear"></div>
 {% endblock main %}
