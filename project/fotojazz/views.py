@@ -1,6 +1,7 @@
 from glob import glob
 from os import path
 import sys
+import time
 from uuid import uuid4
 
 from flask import current_app as app
@@ -24,35 +25,13 @@ mod = Module(__name__, 'fotojazz')
 @mod.route('/')
 def home():
     filebrowse_path = ''
-    thumb_resize_width = app.config['THUMB_RESIZE_WIDTH']
-    thumb_resize_height = app.config['THUMB_RESIZE_HEIGHT']
-    filebrowse_files = []
-    filebrowse_error = ''
-    
-    if not len(sys.argv) > 1:
-        filebrowse_error = 'No path specified.'
-    else:
+    if len(sys.argv) > 1:
         filebrowse_path = add_trailing_slash(sys.argv[1])
     
-        if not path.isdir(filebrowse_path):
-            filebrowse_error = 'Specified path is not a valid directory.'
-        else:
-            glob_pattern = '%s%s' % (filebrowse_path, '*.[jJ][pP]*[gG]')
-            filebrowse_files = [get_thumb_metadata(filename,
-                                                   thumb_resize_width,
-                                                   thumb_resize_height)
-                                for filename in glob(glob_pattern)]
-            
-            if not filebrowse_files:
-                filebrowse_error = 'No images in specified directory.'
-            else:
-                filebrowse_files.sort()
+    filebrowse_files_rendered = photos(filebrowse_path)
     
     return render_template('home.html', filebrowse_path=filebrowse_path,
-                                        filebrowse_error=filebrowse_error,
-                                        filebrowse_files=filebrowse_files,
-                                        thumb_resize_width=thumb_resize_width,
-                                        thumb_resize_height=thumb_resize_height)
+                                        filebrowse_files_rendered=filebrowse_files_rendered)
 
 
 @mod.route('/reorient/start/')
@@ -95,6 +74,52 @@ def reorient_progress():
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico')
+
+
+@mod.route('/photos/')
+def photos(photos_path=''):
+    filebrowse_files = []
+    filebrowse_path = ''
+    filebrowse_error = ''
+    
+    if not photos_path:
+        photos_path = request.args.get('photos_path', '', type=str)
+    
+    if not photos_path:
+        filebrowse_error = 'No path specified.'
+    else:
+        filebrowse_path = add_trailing_slash(photos_path)
+    
+    thumb_resize_width = app.config['THUMB_RESIZE_WIDTH']
+    thumb_resize_height = app.config['THUMB_RESIZE_HEIGHT']
+    
+    if not path.isdir(filebrowse_path):
+        filebrowse_error = 'Specified path is not a valid directory.'
+    else:
+        glob_pattern = '%s%s' % (filebrowse_path, '*.[jJ][pP]*[gG]')
+        filebrowse_files = [get_thumb_metadata(
+                            filename,
+                            thumb_resize_width,
+                            thumb_resize_height)
+                            for filename in glob(glob_pattern)]
+        
+        if not filebrowse_files:
+            filebrowse_error = 'No images in specified directory.'
+        else:
+            filebrowse_files.sort()
+    
+    # Need to add timestamp to thumbnail img src's, as a unique url
+    # value to ensure fresh thumbs get shown on ajax refresh. Doesn't
+    # actually need to be passed as a get param to '/thumbs' (although
+    # it does get passed), not used for anything else.
+    timestamp = int(time.time())
+    
+    return render_template('fragments/photos.html',
+                           filebrowse_files=filebrowse_files,
+                           filebrowse_error=filebrowse_error,
+                           thumb_resize_width=thumb_resize_width,
+                           thumb_resize_height=thumb_resize_height,
+                           timestamp=timestamp)
 
 
 @mod.route("/thumb/")
