@@ -65,11 +65,14 @@ class ExifTran(Thread):
             self.filenames_str = ' '.join(self.filenames)
             self.total_file_count = len(self.filenames)
     
+    def percent_done(self):
+        """Gets the current percent done for the thread."""
+        return float(self.files_processed_count) / float(self.total_file_count) * 100.0
+    
     """Can be called at any time before, during or after thread
     execution, to get current progress."""
     def get_progress(self):
-        percent_done = float(self.files_processed_count) / float(self.total_file_count) * 100.0
-        return '%d files (%.2f%%)' % (self.files_processed_count, percent_done)
+        return '%d files (%.2f%%)' % (self.files_processed_count, self.percent_done())
 
 
 def exiftran_test_run():

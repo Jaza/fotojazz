@@ -1,6 +1,7 @@
 from glob import glob
 from os import path
 import sys
+from uuid import uuid4
 
 from flask import current_app as app
 from flask import jsonify
@@ -11,6 +12,7 @@ from flask import Response
 from flask import send_from_directory
 from werkzeug.exceptions import NotFound
 
+from project import fotojazz_processes
 from project.library.resize import resize
 
 from exiftran import ExifTran
@@ -53,12 +55,40 @@ def home():
                                         thumb_resize_height=thumb_resize_height)
 
 
-@mod.route('/reorient/')
-def reorient():
+@mod.route('/reorient/start/')
+def reorient_start():
     filenames_input = request.args.get('filenames_input', '', type=str)
     et = ExifTran(filenames_str=filenames_input)
     et.start()
-    return jsonify(percent=0)
+    
+    if not 'reorient' in fotojazz_processes:
+        fotojazz_processes['reorient'] = {}
+    key = str(uuid4())
+    fotojazz_processes['reorient'][key] = et
+    percent_done = round(et.percent_done(), 1)
+    done=False
+    
+    return jsonify(key=key, percent=percent_done, done=done)
+
+
+@mod.route('/reorient/progress/')
+def reorient_progress():
+    key = request.args.get('key', '', type=str)
+    
+    if not 'reorient' in fotojazz_processes:
+        fotojazz_processes['reorient'] = {}
+    
+    if not key in fotojazz_processes['reorient']:
+        return jsonify(error='Invalid process key.')
+    
+    percent_done = fotojazz_processes['reorient'][key].percent_done()
+    done = False
+    if not fotojazz_processes['reorient'][key].is_alive() or percent_done == 100.0:
+        del fotojazz_processes['reorient'][key]
+        done = True
+    percent_done = round(percent_done, 1)
+    
+    return jsonify(key=key, percent=percent_done, done=done)
 
 
 @mod.route('/favicon.ico')

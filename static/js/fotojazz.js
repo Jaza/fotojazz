@@ -1,4 +1,20 @@
 fotojazz.operations = function() {
+    function update_orientation_progress(key) {
+        $.getJSON(SCRIPT_ROOT + '/reorient/progress/', {
+            'key': key
+        }, function(data) {
+            $('#operation-reorient-progress').html(data.percent + '%');
+            if (!data.done) {
+                setTimeout(function() {
+                    update_orientation_progress(data.key);
+                }, 100);
+            }
+            else {
+                $('#operation-reorient-progress').html($('#operation-reorient-progress').html() + ' Done!');
+            }
+        });
+    }
+    
     return {
         init: function() {
             $('#operation-reorient').click(function() {
@@ -8,10 +24,13 @@ fotojazz.operations = function() {
                     var filename = $(this).val();
                     filenames_input.push(filebrowse_path + filename);
                 });
-                $.getJSON(SCRIPT_ROOT + '/reorient/', {
+                $.getJSON(SCRIPT_ROOT + '/reorient/start/', {
                     'filenames_input': filenames_input.join(' ')
                 }, function(data) {
-                    alert(data.percent);
+                    $('#operation-reorient-progress').html(data.percent + '%');
+                    setTimeout(function() {
+                        update_orientation_progress(data.key);
+                    }, 100);
                 });
                 return false;
             });
