@@ -8,6 +8,17 @@ h1#site-name a, p#site-name a {
   color: #000;
   text-decoration: none;
 }
+a:link, a:visited, a:active {
+  color: #006;
+  text-decoration: none;
+}
+a:hover {
+  color: #060;
+  background-color: #fcc;
+}
+p {
+  margin-bottom: 10px;
+}
 label {
   display: block;
 }

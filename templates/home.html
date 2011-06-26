@@ -19,6 +19,8 @@
   <label for="id_path">Path to folder:</label>
   <input id="id_path" type="text" name="path" maxlength="255" size="60" value="{{ filebrowse_path }}" />
   
+  <p id="select-links">Select: <a href="#" id="select-all">all</a> | <a href="#" id="select-none">none</a></p>
+  
   <div id="filebrowse-display">
     {{ filebrowse_files_rendered|safe }}
   </div><!-- /#filebrowse-display -->

@@ -54,6 +54,14 @@ fotojazz.operations = function() {
     return {
         init: function() {
             $('.operation-progress').progressbar({'disabled': true});
+            $('#select-all').click(function() {
+                $('.filebrowse-checkbox').attr('checked', 'checked');
+                return false;
+            });
+            $('#select-none').click(function() {
+                $('.filebrowse-checkbox').removeAttr('checked');
+                return false;
+            });
             reorient_start();
         }
     }
