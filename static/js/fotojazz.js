@@ -1,35 +1,35 @@
 fotojazz.operations = function() {
-    function reorient_start() {
-        $('#operation-reorient').click(function() {
+    function process_start(process_css_name, process_class_name) {
+        $('#operation-' + process_css_name).click(function() {
             var filenames_input = get_filenames_list();
-            $.getJSON(SCRIPT_ROOT + '/process/start/ExifTranProcess/', {
+            $.getJSON(SCRIPT_ROOT + '/process/start/' + process_class_name + '/', {
                 'filenames_input': filenames_input.join(' ')
             }, function(data) {
-                $('#operation-reorient').attr('disabled', 'disabled');
-                $('#operation-reorient-progress').progressbar('option', 'disabled', false);
-                $('#operation-reorient-progress').progressbar('option', 'value', data.percent);
+                $('#operation-' + process_css_name).attr('disabled', 'disabled');
+                $('#operation-' + process_css_name + '-progress').progressbar('option', 'disabled', false);
+                $('#operation-' + process_css_name + '-progress').progressbar('option', 'value', data.percent);
                 setTimeout(function() {
-                    reorient_progress(data.key);
+                    process_progress(process_css_name, process_class_name, data.key);
                 }, 100);
             });
             return false;
         });
     }
     
-    function reorient_progress(key) {
-        $.getJSON(SCRIPT_ROOT + '/process/progress/ExifTranProcess/', {
+    function process_progress(process_css_name, process_class_name, key) {
+        $.getJSON(SCRIPT_ROOT + '/process/progress/' + process_class_name + '/', {
             'key': key
         }, function(data) {
-            $('#operation-reorient-progress').progressbar('option', 'value', data.percent);
+            $('#operation-' + process_css_name + '-progress').progressbar('option', 'value', data.percent);
             if (!data.done) {
                 setTimeout(function() {
-                    reorient_progress(data.key);
+                    process_progress(process_css_name, process_class_name, data.key);
                 }, 100);
             }
             else {
-                $('#operation-reorient').removeAttr('disabled');
-                $('#operation-reorient-progress').progressbar('option', 'value', 0);
-                $('#operation-reorient-progress').progressbar('option', 'disabled', true);
+                $('#operation-' + process_css_name).removeAttr('disabled');
+                $('#operation-' + process_css_name + '-progress').progressbar('option', 'value', 0);
+                $('#operation-' + process_css_name + '-progress').progressbar('option', 'disabled', true);
                 refresh_photos();
             }
         });
@@ -72,7 +72,7 @@ fotojazz.operations = function() {
                 return true;
             });
             
-            reorient_start();
+            process_start('reorient', 'ExifTranProcess');
         }
     }
 }();
