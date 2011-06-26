@@ -85,6 +85,9 @@ def photos(photos_path='', check_all=False):
         filenames_input = [x.strip() for x in filenames_str.split(' ') if x != '']
     if len(filenames_input):
         filenames_input.sort()
+    check_all_arg = request.args.get('check_all', '', type=str)
+    if check_all_arg != '':
+        check_all = int(check_all_arg) and True or False
     filebrowse_files = []
     filebrowse_path = ''
     filebrowse_error = ''

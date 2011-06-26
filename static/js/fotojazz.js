@@ -45,15 +45,19 @@ fotojazz.operations = function() {
         return filenames_input;
     }
     
-    function refresh_photos() {
+    function refresh_photos(check_all) {
+        if (check_all == undefined) {
+            check_all = false;
+        }
         var filebrowse_path = $('#id_path').val();
         var filenames_input = get_filenames_list();
-        $('#filebrowse-display').load(SCRIPT_ROOT + '/photos/?photos_path=' + filebrowse_path + '&filenames_input=' + encodeURIComponent(filenames_input.join(' ')));
+        $('#filebrowse-display').load(SCRIPT_ROOT + '/photos/?photos_path=' + filebrowse_path + '&check_all=' + (check_all ? '1' : '0') + '&filenames_input=' + encodeURIComponent(filenames_input.join(' ')));
     }
     
     return {
         init: function() {
             $('.operation-progress').progressbar({'disabled': true});
+            
             $('#select-all').click(function() {
                 $('.filebrowse-checkbox').attr('checked', 'checked');
                 return false;
@@ -62,6 +66,12 @@ fotojazz.operations = function() {
                 $('.filebrowse-checkbox').removeAttr('checked');
                 return false;
             });
+            
+            $('#id_path').keyup(function() {
+                refresh_photos(true);
+                return true;
+            });
+            
             reorient_start();
         }
     }
