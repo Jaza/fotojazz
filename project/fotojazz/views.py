@@ -35,36 +35,39 @@ def home():
                                         filebrowse_files_rendered=filebrowse_files_rendered)
 
 
-@mod.route('/reorient/start/')
-def reorient_start():
+@mod.route('/process/start/<process_class_name>/')
+def process_start(process_class_name):
     filenames_input = request.args.get('filenames_input', '', type=str)
-    et = ExifTranProcess(filenames_str=filenames_input)
-    et.start()
+    process_class_obj = None
+    if process_class_name in globals():
+        process_class_obj = globals()[process_class_name]
+    fjp = process_class_obj(filenames_str=filenames_input)
+    fjp.start()
     
-    if not 'reorient' in fotojazz_processes:
-        fotojazz_processes['reorient'] = {}
+    if not process_class_name in fotojazz_processes:
+        fotojazz_processes[process_class_name] = {}
     key = str(uuid4())
-    fotojazz_processes['reorient'][key] = et
-    percent_done = round(et.percent_done(), 1)
+    fotojazz_processes[process_class_name][key] = fjp
+    percent_done = round(fjp.percent_done(), 1)
     done=False
     
     return jsonify(key=key, percent=percent_done, done=done)
 
 
-@mod.route('/reorient/progress/')
-def reorient_progress():
+@mod.route('/process/progress/<process_class_name>/')
+def process_progress(process_class_name):
     key = request.args.get('key', '', type=str)
     
-    if not 'reorient' in fotojazz_processes:
-        fotojazz_processes['reorient'] = {}
+    if not process_class_name in fotojazz_processes:
+        fotojazz_processes[process_class_name] = {}
     
-    if not key in fotojazz_processes['reorient']:
+    if not key in fotojazz_processes[process_class_name]:
         return jsonify(error='Invalid process key.')
     
-    percent_done = fotojazz_processes['reorient'][key].percent_done()
+    percent_done = fotojazz_processes[process_class_name][key].percent_done()
     done = False
-    if not fotojazz_processes['reorient'][key].is_alive() or percent_done == 100.0:
-        del fotojazz_processes['reorient'][key]
+    if not fotojazz_processes[process_class_name][key].is_alive() or percent_done == 100.0:
+        del fotojazz_processes[process_class_name][key]
         done = True
     percent_done = round(percent_done, 1)
     

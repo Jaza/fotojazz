@@ -2,7 +2,7 @@ fotojazz.operations = function() {
     function reorient_start() {
         $('#operation-reorient').click(function() {
             var filenames_input = get_filenames_list();
-            $.getJSON(SCRIPT_ROOT + '/reorient/start/', {
+            $.getJSON(SCRIPT_ROOT + '/process/start/ExifTranProcess/', {
                 'filenames_input': filenames_input.join(' ')
             }, function(data) {
                 $('#operation-reorient').attr('disabled', 'disabled');
@@ -17,7 +17,7 @@ fotojazz.operations = function() {
     }
     
     function reorient_progress(key) {
-        $.getJSON(SCRIPT_ROOT + '/reorient/progress/', {
+        $.getJSON(SCRIPT_ROOT + '/process/progress/ExifTranProcess/', {
             'key': key
         }, function(data) {
             $('#operation-reorient-progress').progressbar('option', 'value', data.percent);
