@@ -11,7 +11,7 @@ def add_trailing_slash(filepath):
     return '%s%s' % (filepath, suffix)
 
 
-def get_thumb_metadata(filename, thumb_resize_width, thumb_resize_height):
+def get_thumb_metadata(filename, thumb_resize_width, thumb_resize_height, checked=True):
     '''For the given image and its requested thumbnail size, returns
     a dictionary of metadata needed to display the image as a
     thumbnail.'''
@@ -33,10 +33,11 @@ def get_thumb_metadata(filename, thumb_resize_width, thumb_resize_height):
         thumb_height = thumb_resize_height
         left_offset = int((thumb_resize_width - thumb_width) / 2)
     
-    return {'filename': path.basename(filename),
-            'fullname': filename,
+    return {'fullname': filename,
             'thumb_width': int(thumb_width),
             'thumb_height': int(thumb_height),
             'top_offset': top_offset,
-            'left_offset': left_offset}
+            'left_offset': left_offset,
+            'checked': checked,
+            'filename': path.basename(filename)}
 

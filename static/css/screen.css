@@ -22,9 +22,16 @@ input[type=submit] {
   text-transform: uppercase;
   font-weight: bold;
 }
+input[type=submit]:focus::-moz-focus-inner {
+  border: none;
+}
 input[type=submit]:hover {
   background-color: #636363;
   color: #ccc;
+}
+input[type=submit][disabled], input[type=submit][disabled]:hover {
+  background-color: #999;
+  color: #636363;
 }
 img {
   display: block;

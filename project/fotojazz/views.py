@@ -1,4 +1,5 @@
 from glob import glob
+from operator import itemgetter
 from os import path
 import sys
 import time
@@ -28,7 +29,7 @@ def home():
     if len(sys.argv) > 1:
         filebrowse_path = add_trailing_slash(sys.argv[1])
     
-    filebrowse_files_rendered = photos(filebrowse_path)
+    filebrowse_files_rendered = photos(filebrowse_path, check_all=True)
     
     return render_template('home.html', filebrowse_path=filebrowse_path,
                                         filebrowse_files_rendered=filebrowse_files_rendered)
@@ -77,7 +78,13 @@ def favicon():
 
 
 @mod.route('/photos/')
-def photos(photos_path=''):
+def photos(photos_path='', check_all=False):
+    filenames_str = request.args.get('filenames_input', '', type=str)
+    filenames_input = []
+    if filenames_str != '':
+        filenames_input = [x.strip() for x in filenames_str.split(' ') if x != '']
+    if len(filenames_input):
+        filenames_input.sort()
     filebrowse_files = []
     filebrowse_path = ''
     filebrowse_error = ''
@@ -100,22 +107,23 @@ def photos(photos_path=''):
         filebrowse_files = [get_thumb_metadata(
                             filename,
                             thumb_resize_width,
-                            thumb_resize_height)
+                            thumb_resize_height,
+                            checked=check_all or filename in filenames_input)
                             for filename in glob(glob_pattern)]
         
         if not filebrowse_files:
             filebrowse_error = 'No images in specified directory.'
         else:
-            filebrowse_files.sort()
+            filebrowse_files.sort(key=itemgetter('filename'))
     
     # Need to add timestamp to thumbnail img src's, as a unique url
     # value to ensure fresh thumbs get shown on ajax refresh. Doesn't
     # actually need to be passed as a get param to '/thumbs' (although
     # it does get passed), not used for anything else.
     timestamp = int(time.time())
-    
     return render_template('fragments/photos.html',
                            filebrowse_files=filebrowse_files,
+                           filenames_input=filenames_input,
                            filebrowse_error=filebrowse_error,
                            thumb_resize_width=thumb_resize_width,
                            thumb_resize_height=thumb_resize_height,
