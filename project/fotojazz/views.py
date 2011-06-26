@@ -17,7 +17,7 @@ from werkzeug.exceptions import NotFound
 from project import fotojazz_processes
 from project.library.resize import resize
 
-from exiftran import ExifTran
+from exiftran import ExifTranProcess
 from utils import add_trailing_slash, get_thumb_metadata
 
 
@@ -38,7 +38,7 @@ def home():
 @mod.route('/reorient/start/')
 def reorient_start():
     filenames_input = request.args.get('filenames_input', '', type=str)
-    et = ExifTran(filenames_str=filenames_input)
+    et = ExifTranProcess(filenames_str=filenames_input)
     et.start()
     
     if not 'reorient' in fotojazz_processes:
