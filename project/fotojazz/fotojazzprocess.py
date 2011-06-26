@@ -20,11 +20,13 @@ class FotoJazzProcess(Thread):
     # total_file_count, progress is 100%).
     files_processed_count = 0
     
-    def __init__(self, filenames=[], filenames_str=''):
+    def __init__(self, *args, **kwargs):
         """When initialising this class, you can pass in either a list of filenames (first param), or a string of space-delimited filenames (second param). No need to pass in both."""
         Thread.__init__(self)
-        self.filenames = filenames
-        self.filenames_str = filenames_str
+        if 'filenames' in kwargs:
+            self.filenames = kwargs['filenames']
+        if 'filenames_str' in kwargs:
+            self.filenames_str = kwargs['filenames_str']
         self.prepare_filenames()
         self.files_processed_count = 0
     
@@ -61,7 +63,7 @@ class FotoJazzProcessShellRun():
     def __init__(self, init_class=FotoJazzProcess):
         self.init_class = init_class
     
-    def __call__(self):
+    def __call__(self, *args, **kwargs):
         if not len(sys.argv) > 1:
             print 'Error: no file path specified.'
             exit()
@@ -73,8 +75,8 @@ class FotoJazzProcessShellRun():
         filebrowse_path = '%s%s' % (filebrowse_path,
                                     suffix)
         filenames_input = glob('%s*.[jJ][pP]*[gG]' % filebrowse_path)
-
-        fjp = self.init_class(filenames_input)
+        kwargs['filenames'] = filenames_input
+        fjp = self.init_class(*args, **kwargs)
 
         print '%s threaded process beginning.' % fjp.__class__.__name__
         print '%d files will be processed. Now beginning progress output.' % fjp.total_file_count

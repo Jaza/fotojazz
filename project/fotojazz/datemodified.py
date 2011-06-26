@@ -1,10 +1,7 @@
 #!./bin/python
 
-from glob import glob
-from os import path, utime
-from threading import Thread
-import sys
-from time import mktime, sleep
+from os import utime
+from time import mktime
 
 import pyexiv2
 

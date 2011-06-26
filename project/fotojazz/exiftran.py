@@ -1,10 +1,6 @@
 #!./bin/python
 
-from glob import glob
-import sys
 from subprocess import Popen, PIPE
-from threading import Thread
-from time import sleep
 
 from project.fotojazz.fotojazzprocess import FotoJazzProcess, FotoJazzProcessShellRun
 
