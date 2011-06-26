@@ -10,7 +10,8 @@ fotojazz.operations = function() {
             $.getJSON(SCRIPT_ROOT + '/reorient/start/', {
                 'filenames_input': filenames_input.join(' ')
             }, function(data) {
-                $('#operation-reorient-progress').html(data.percent + '%');
+                $('#operation-reorient-progress').progressbar('option', 'disabled', false);
+                $('#operation-reorient-progress').progressbar('option', 'value', data.percent);
                 setTimeout(function() {
                     reorient_progress(data.key);
                 }, 100);
@@ -23,14 +24,15 @@ fotojazz.operations = function() {
         $.getJSON(SCRIPT_ROOT + '/reorient/progress/', {
             'key': key
         }, function(data) {
-            $('#operation-reorient-progress').html(data.percent + '%');
+            $('#operation-reorient-progress').progressbar('option', 'value', data.percent);
             if (!data.done) {
                 setTimeout(function() {
                     reorient_progress(data.key);
                 }, 100);
             }
             else {
-                $('#operation-reorient-progress').html($('#operation-reorient-progress').html() + ' Done!');
+                $('#operation-reorient-progress').progressbar('option', 'value', 0);
+                $('#operation-reorient-progress').progressbar('option', 'disabled', true);
                 refresh_photos();
             }
         });
@@ -43,6 +45,7 @@ fotojazz.operations = function() {
     
     return {
         init: function() {
+            $('.operation-progress').progressbar({'disabled': true});
             reorient_start();
         }
     }

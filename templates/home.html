@@ -1,6 +1,17 @@
 {% extends 'base_site.html' %}
 
-{% block extra_js %}<script type="text/javascript" src="{{ url_for('static', filename='js/fotojazz.js') }}"></script>{% endblock extra_js %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.ui.core.min.css') }}" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.ui.theme.min.css') }}" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.ui.progressbar.min.css') }}" type="text/css" media="screen" charset="utf-8" />
+{% endblock extra_css %}
+
+{% block extra_js %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.ui.core.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.ui.widget.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.ui.progressbar.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/fotojazz.js') }}"></script>
+{% endblock extra_js %}
 
 {% block main %}
 <form action="/" method="post">
@@ -15,6 +26,7 @@
 
 <div id="operations" class="grid_6">
   <div class="operation">
+    <h2>Fix orientation</h2>
     <div class="operation-progress" id="operation-reorient-progress"></div>
     <input type="submit" value="Fix orientation" id="operation-reorient" />
   </div><!-- /#operation -->
