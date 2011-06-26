@@ -18,6 +18,7 @@ from project import fotojazz_processes
 from project.library.resize import resize
 
 from exiftran import ExifTranProcess
+from datemodified import DateModifiedProcess
 from utils import add_trailing_slash, get_thumb_metadata
 
 

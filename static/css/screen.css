@@ -111,7 +111,8 @@ img {
   border: 1px solid #636363;
   position: relative;
   padding: 30px 10px 20px;
-  margin: 10px 0;
+  margin: 10px 0 30px;
+  clear: both;
 }
 .operation h2 {
   position: absolute;

@@ -73,6 +73,7 @@ fotojazz.operations = function() {
             });
             
             process_start('reorient', 'ExifTranProcess');
+            process_start('datemodified', 'DateModifiedProcess');
         }
     }
 }();
