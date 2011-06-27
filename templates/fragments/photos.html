@@ -4,9 +4,17 @@
   
   {% if filebrowse_files %}
     {% for filebrowse_file in filebrowse_files %}
-      <div class="filebrowse-image{{ loop.cycle('', '', '', ' filebrowse-image-right') }}">
+      <div class="filebrowse-image">
         <label for="filebrowse_image_{{ filebrowse_file.filename }}"><img src="{{ url_for('thumb', file=filebrowse_file.fullname, width=thumb_resize_width, height=thumb_resize_height, timestamp=timestamp) }}" width="{{ filebrowse_file.thumb_width }}" height="{{ filebrowse_file.thumb_height }}"{% if filebrowse_file.top_offset %} style="top: {{ filebrowse_file.top_offset }}px"{% endif %}{% if filebrowse_file.left_offset %} style="left: {{ filebrowse_file.left_offset }}px"{% endif %} /></label>
         <input type="checkbox" id="filebrowse_image_{{ filebrowse_file.filename }}" value="{{ filebrowse_file.filename }}" name="filebrowse_files"{% if filebrowse_file.checked %} checked="checked"{% endif %} class="filebrowse-checkbox" />
+        
+        <p class="filebrowse-meta">
+          <strong>{{ filebrowse_file.filename }}</strong><br />
+          {{ filebrowse_file.filesize|filesizeformat }}<br />
+          <em>Taken:</em> {{ filebrowse_file.date_taken }}<br />
+          <em>Modified:</em> {% if filebrowse_file.date_modified != filebrowse_file.date_taken %}<span class="error">{% endif %}{{ filebrowse_file.date_modified }}{% if filebrowse_file.date_modified != filebrowse_file.date_taken %}</span>{% endif %}<br />
+          <em>Orientation:</em> {% if filebrowse_file.orientation == 1 %}OK{% else %}<span class="error">wrong</span>{% endif %}
+        </p><!-- /.filebrowse-meta -->
       </div><!-- /.filebrowse-image -->
     {% endfor %}
     

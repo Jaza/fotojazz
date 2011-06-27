@@ -133,7 +133,7 @@ def photos(photos_path='', check_all=False):
         if not filebrowse_files:
             filebrowse_error = 'No images in specified directory.'
         else:
-            filebrowse_files.sort(key=itemgetter('datemodified'))
+            filebrowse_files.sort(key=itemgetter('date_taken_timestamp'))
     
     # Need to add timestamp to thumbnail img src's, as a unique url
     # value to ensure fresh thumbs get shown on ajax refresh. Doesn't
