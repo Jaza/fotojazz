@@ -5,8 +5,15 @@ fotojazz.operations = function() {
         }
         $('#operation-' + process_css_name).click(function() {
             var filenames_input = get_filenames_list();
+            var filebrowse_path = $('#id_path').val();
+            var suffix = '/';
+            if (filebrowse_path.charAt(filebrowse_path.length-1) == '/') {
+                suffix = '';
+            }
+            filebrowse_path += suffix;
             var args = {
                 'filenames_input': filenames_input.join(' '),
+                'filebrowse_path': filebrowse_path,
                 'extra_args': ''
             };
             for (var i = 0; i < extra_args.length; i++) {
@@ -48,6 +55,11 @@ fotojazz.operations = function() {
     function get_filenames_list() {
         var filenames_input = [];
         var filebrowse_path = $('#id_path').val();
+        var suffix = '/';
+        if (filebrowse_path.charAt(filebrowse_path.length-1) == '/') {
+            suffix = '';
+        }
+        filebrowse_path += suffix;
         $('.filebrowse-checkbox:checked').each(function() {
             var filename = $(this).val();
             filenames_input.push(filebrowse_path + filename);
@@ -60,6 +72,11 @@ fotojazz.operations = function() {
             check_all = false;
         }
         var filebrowse_path = $('#id_path').val();
+        var suffix = '/';
+        if (filebrowse_path.charAt(filebrowse_path.length-1) == '/') {
+            suffix = '';
+        }
+        filebrowse_path += suffix;
         var filenames_input = get_filenames_list();
         $('#filebrowse-display').load(SCRIPT_ROOT + '/photos/?photos_path=' + filebrowse_path + '&check_all=' + (check_all ? '1' : '0') + '&filenames_input=' + encodeURIComponent(filenames_input.join(' ')));
     }
@@ -84,6 +101,7 @@ fotojazz.operations = function() {
             
             process_start('reorient', 'ExifTranProcess');
             process_start('shiftdate', 'ShiftDateProcess', ['offset']);
+            process_start('renamewithid', 'RenameWithIdProcess', ['prefix']);
             process_start('datemodified', 'DateModifiedProcess');
         }
     }

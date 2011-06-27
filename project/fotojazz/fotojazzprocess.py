@@ -11,6 +11,7 @@ class FotoJazzProcess(Thread):
     """Parent / example class for running threaded FotoJazz processes. You should use this as a base class if you want to process a directory full of files, in batch, within a thread, and you want to report on the progress of the thread."""
     
     filenames_str = ''
+    filebrowse_path = ''
     filenames = []
     total_file_count = 0
     
@@ -27,6 +28,7 @@ class FotoJazzProcess(Thread):
             self.filenames = kwargs['filenames']
         if 'filenames_str' in kwargs:
             self.filenames_str = kwargs['filenames_str']
+        self.filebrowse_path = kwargs['filebrowse_path']
         self.prepare_filenames()
         self.files_processed_count = 0
     
@@ -76,6 +78,7 @@ class FotoJazzProcessShellRun():
                                     suffix)
         filenames_input = glob('%s*.[jJ][pP]*[gG]' % filebrowse_path)
         kwargs['filenames'] = filenames_input
+        kwargs['filebrowse_path'] = filebrowse_path
         fjp = self.init_class(*args, **kwargs)
 
         print '%s threaded process beginning.' % fjp.__class__.__name__

@@ -19,6 +19,7 @@ from project.library.resize import resize
 
 from exiftran import ExifTranProcess
 from datemodified import DateModifiedProcess
+from renamewithid import RenameWithIdProcess
 from shiftdate import ShiftDateProcess
 from utils import add_trailing_slash, get_thumb_metadata
 
@@ -44,10 +45,14 @@ def process_start(process_class_name):
     if process_class_name in globals():
         process_class_obj = globals()[process_class_name]
     args = []
+    filebrowse_path = request.args.get('filebrowse_path', '', type=str)
     extra_args_input = request.args.get('extra_args', '', type=str)
     if extra_args_input != '':
         args = extra_args_input.split(';')
-    kwargs = {'filenames_str': filenames_input}
+    kwargs = {
+        'filenames_str': filenames_input,
+        'filebrowse_path': filebrowse_path
+    }
     fjp = process_class_obj(*args, **kwargs)
     fjp.start()
     
