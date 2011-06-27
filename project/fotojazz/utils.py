@@ -1,5 +1,6 @@
 import Image
-from os import path
+from os import path, stat
+from stat import ST_MTIME, ST_SIZE
 
 
 def add_trailing_slash(filepath):
@@ -33,11 +34,15 @@ def get_thumb_metadata(filename, thumb_resize_width, thumb_resize_height, checke
         thumb_height = thumb_resize_height
         left_offset = int((thumb_resize_width - thumb_width) / 2)
     
+    statinfo = stat(filename)
+    
     return {'fullname': filename,
             'thumb_width': int(thumb_width),
             'thumb_height': int(thumb_height),
             'top_offset': top_offset,
             'left_offset': left_offset,
             'checked': checked,
-            'filename': path.basename(filename)}
+            'filename': path.basename(filename),
+            'filesize': statinfo[ST_SIZE],
+            'datemodified': statinfo[ST_MTIME]}
 

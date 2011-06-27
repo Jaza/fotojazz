@@ -117,17 +117,18 @@ def photos(photos_path='', check_all=False):
         filebrowse_error = 'Specified path is not a valid directory.'
     else:
         glob_pattern = '%s%s' % (filebrowse_path, '*.[jJ][pP]*[gG]')
+        filenames = glob(glob_pattern)
         filebrowse_files = [get_thumb_metadata(
                             filename,
                             thumb_resize_width,
                             thumb_resize_height,
                             checked=check_all or filename in filenames_input)
-                            for filename in glob(glob_pattern)]
+                            for filename in filenames]
         
         if not filebrowse_files:
             filebrowse_error = 'No images in specified directory.'
         else:
-            filebrowse_files.sort(key=itemgetter('filename'))
+            filebrowse_files.sort(key=itemgetter('datemodified'))
     
     # Need to add timestamp to thumbnail img src's, as a unique url
     # value to ensure fresh thumbs get shown on ajax refresh. Doesn't
