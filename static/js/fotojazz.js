@@ -1,10 +1,20 @@
 fotojazz.operations = function() {
-    function process_start(process_css_name, process_class_name) {
+    function process_start(process_css_name, process_class_name, extra_args) {
+        if (extra_args == undefined) {
+            extra_args = [];
+        }
         $('#operation-' + process_css_name).click(function() {
             var filenames_input = get_filenames_list();
-            $.getJSON(SCRIPT_ROOT + '/process/start/' + process_class_name + '/', {
-                'filenames_input': filenames_input.join(' ')
-            }, function(data) {
+            var args = {
+                'filenames_input': filenames_input.join(' '),
+                'extra_args': ''
+            };
+            for (var i = 0; i < extra_args.length; i++) {
+                args['extra_args'] += (args['extra_args'] != '' ? ';' : '') + $('#operation-' + process_css_name + '-' + extra_args[i]).val();
+            }
+            $.getJSON(SCRIPT_ROOT + '/process/start/' + process_class_name + '/',
+            args,
+            function(data) {
                 $('#operation-' + process_css_name).attr('disabled', 'disabled');
                 $('#operation-' + process_css_name + '-progress').progressbar('option', 'disabled', false);
                 $('#operation-' + process_css_name + '-progress').progressbar('option', 'value', data.percent);
@@ -73,6 +83,7 @@ fotojazz.operations = function() {
             });
             
             process_start('reorient', 'ExifTranProcess');
+            process_start('shiftdate', 'ShiftDateProcess', ['offset']);
             process_start('datemodified', 'DateModifiedProcess');
         }
     }

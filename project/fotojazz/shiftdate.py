@@ -8,17 +8,17 @@ from project.fotojazz.fotojazzprocess import FotoJazzProcess, FotoJazzProcessShe
 
 
 class ShiftDateProcess(FotoJazzProcess):
-    time_str = ''
+    offset = ''
     
     def __init__(self, *args, **kwargs):
         FotoJazzProcess.__init__(self, *args, **kwargs)
-        self.time_str = args[0]
+        self.offset = args[0]
     
     def run(self):
         """Shifts the exif date taken by the specified offset, for all images in the specified file path."""
         self.prepare_filenames()
         
-        delta = parsetimedelta(self.time_str)
+        delta = parsetimedelta(self.offset)
         
         for filename in self.filenames:
             metadata = pyexiv2.ImageMetadata(filename)

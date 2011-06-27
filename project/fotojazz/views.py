@@ -19,6 +19,7 @@ from project.library.resize import resize
 
 from exiftran import ExifTranProcess
 from datemodified import DateModifiedProcess
+from shiftdate import ShiftDateProcess
 from utils import add_trailing_slash, get_thumb_metadata
 
 
@@ -42,7 +43,12 @@ def process_start(process_class_name):
     process_class_obj = None
     if process_class_name in globals():
         process_class_obj = globals()[process_class_name]
-    fjp = process_class_obj(filenames_str=filenames_input)
+    args = []
+    extra_args_input = request.args.get('extra_args', '', type=str)
+    if extra_args_input != '':
+        args = extra_args_input.split(';')
+    kwargs = {'filenames_str': filenames_input}
+    fjp = process_class_obj(*args, **kwargs)
     fjp.start()
     
     if not process_class_name in fotojazz_processes:
