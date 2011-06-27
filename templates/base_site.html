@@ -9,7 +9,13 @@
     <{% if request.path == '/' %}h1{% else %}div{% endif %} id="site-name"><a href="{{ url_for('fotojazz.home') }}">{{ config.SITE_NAME }}</a></{% if request.path == '/' %}h1{% else %}div{% endif %}>
     
     <div id="slogan">
-      <p>Nifty tool</p>
+      <p>A tool for cleaning up your photo collection.</p>
+      <ul>
+        <li>Rotates an image to its correct orientation, per its Exif metadata.</li>
+        <li>Shifts the Exif 'date taken' value of an image backwards or forwards by a specified time interval.</li>
+        <li>Renames a batch of images per a specified prefix, and with a unique integer ID.</li>
+        <li>Updates the 'date modified' metadata of an image to match its 'take taken' value.</li>
+      </ul>
     </div><!-- /#slogan -->
     
     <div class="clear"></div>
@@ -20,7 +26,8 @@
 {% block main %}{% endblock main %}
 
 <div id="footer" class="grid_12">
-Cooh, eh?</div><!-- /#footer -->
+  Created by <a href="http://greenash.net.au/">Jeremy Epstein</a>. Use it as you will: hack, fork, play.
+</div><!-- /#footer -->
 <div class="clear"></div>
 
 {% endblock wrapper %}

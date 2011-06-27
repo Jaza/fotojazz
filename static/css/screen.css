@@ -71,8 +71,11 @@ img {
   float: left;
   margin-right: 10px;
 }
-#slogan {
+#slogan p {
   font-style: italic;
+}
+#slogan li {
+  margin-left: 125px;
 }
 
 
