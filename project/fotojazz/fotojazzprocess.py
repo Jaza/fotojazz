@@ -2,7 +2,6 @@
 
 from glob import glob
 import sys
-from subprocess import Popen, PIPE
 from threading import Thread
 from time import sleep
 
