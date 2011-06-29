@@ -1,5 +1,7 @@
 fotojazz.operations = function() {
-    function process_start(process_css_name, process_class_name, extra_args) {
+    function process_start(process_css_name,
+                           process_class_name,
+                           extra_args) {
         if (extra_args == undefined) {
             extra_args = [];
         }
@@ -7,7 +9,8 @@ fotojazz.operations = function() {
             var filenames_input = get_filenames_list();
             var filebrowse_path = $('#id_path').val();
             var suffix = '/';
-            if (filebrowse_path.charAt(filebrowse_path.length-1) == '/') {
+            if (filebrowse_path.charAt(filebrowse_path.length-1)
+                == '/') {
                 suffix = '';
             }
             filebrowse_path += suffix;
@@ -17,36 +20,56 @@ fotojazz.operations = function() {
                 'extra_args': ''
             };
             for (var i = 0; i < extra_args.length; i++) {
-                args['extra_args'] += (args['extra_args'] != '' ? ';' : '') + $('#operation-' + process_css_name + '-' + extra_args[i]).val();
+                args['extra_args'] += (args['extra_args'] != '' ? ';'
+                                                                : '') +
+                                      $('#operation-' +
+                                      process_css_name + '-' +
+                                      extra_args[i]).val();
             }
-            $.getJSON(SCRIPT_ROOT + '/process/start/' + process_class_name + '/',
+            $.getJSON(SCRIPT_ROOT + '/process/start/' +
+                      process_class_name + '/',
             args,
             function(data) {
-                $('#operation-' + process_css_name).attr('disabled', 'disabled');
-                $('#operation-' + process_css_name + '-progress').progressbar('option', 'disabled', false);
-                $('#operation-' + process_css_name + '-progress').progressbar('option', 'value', data.percent);
+                $('#operation-' + process_css_name).attr('disabled',
+                                                         'disabled');
+                $('#operation-' + process_css_name + '-progress')
+                .progressbar('option', 'disabled', false);
+                $('#operation-' + process_css_name + '-progress')
+                .progressbar('option', 'value', data.percent);
                 setTimeout(function() {
-                    process_progress(process_css_name, process_class_name, data.key);
+                    process_progress(process_css_name,
+                                     process_class_name,
+                                     data.key);
                 }, 100);
             });
             return false;
         });
     }
     
-    function process_progress(process_css_name, process_class_name, key) {
-        $.getJSON(SCRIPT_ROOT + '/process/progress/' + process_class_name + '/', {
+    function process_progress(process_css_name,
+                              process_class_name,
+                              key) {
+        $.getJSON(SCRIPT_ROOT + '/process/progress/' +
+                  process_class_name + '/',
+        {
             'key': key
         }, function(data) {
-            $('#operation-' + process_css_name + '-progress').progressbar('option', 'value', data.percent);
+            $('#operation-' + process_css_name + '-progress')
+            .progressbar('option', 'value', data.percent);
             if (!data.done) {
                 setTimeout(function() {
-                    process_progress(process_css_name, process_class_name, data.key);
+                    process_progress(process_css_name,
+                                     process_class_name,
+                                     data.key);
                 }, 100);
             }
             else {
-                $('#operation-' + process_css_name).removeAttr('disabled');
-                $('#operation-' + process_css_name + '-progress').progressbar('option', 'value', 0);
-                $('#operation-' + process_css_name + '-progress').progressbar('option', 'disabled', true);
+                $('#operation-' + process_css_name)
+                .removeAttr('disabled');
+                $('#operation-' + process_css_name + '-progress')
+                .progressbar('option', 'value', 0);
+                $('#operation-' + process_css_name + '-progress')
+                .progressbar('option', 'disabled', true);
                 refresh_photos();
             }
         });
@@ -56,7 +79,8 @@ fotojazz.operations = function() {
         var filenames_input = [];
         var filebrowse_path = $('#id_path').val();
         var suffix = '/';
-        if (filebrowse_path.charAt(filebrowse_path.length-1) == '/') {
+        if (filebrowse_path.charAt(filebrowse_path.length-1)
+            == '/') {
             suffix = '';
         }
         filebrowse_path += suffix;
@@ -73,12 +97,19 @@ fotojazz.operations = function() {
         }
         var filebrowse_path = $('#id_path').val();
         var suffix = '/';
-        if (filebrowse_path.charAt(filebrowse_path.length-1) == '/') {
+        if (filebrowse_path.charAt(filebrowse_path.length-1)
+            == '/') {
             suffix = '';
         }
         filebrowse_path += suffix;
         var filenames_input = get_filenames_list();
-        $('#filebrowse-display').load(SCRIPT_ROOT + '/photos/?photos_path=' + filebrowse_path + '&check_all=' + (check_all ? '1' : '0') + '&filenames_input=' + encodeURIComponent(filenames_input.join(' ')));
+        $('#filebrowse-display').load(SCRIPT_ROOT +
+                                      '/photos/?photos_path=' +
+                                      filebrowse_path + '&check_all=' +
+                                      (check_all ? '1' : '0') +
+                                      '&filenames_input=' +
+                                      encodeURIComponent(
+                                      filenames_input.join(' ')));
     }
     
     return {
@@ -101,7 +132,9 @@ fotojazz.operations = function() {
             
             process_start('reorient', 'ExifTranProcess');
             process_start('shiftdate', 'ShiftDateProcess', ['offset']);
-            process_start('renamewithid', 'RenameWithIdProcess', ['prefix']);
+            process_start('renamewithid',
+                          'RenameWithIdProcess',
+                          ['prefix']);
             process_start('datemodified', 'DateModifiedProcess');
         }
     }
