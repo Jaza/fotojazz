@@ -1,4 +1,4 @@
-#!./bin/python
+#!/usr/bin/env python
 
 import pyexiv2
 import sys

@@ -1,4 +1,4 @@
-#!./bin/python
+#!/usr/bin/env python
 
 from os import utime
 from time import mktime
