@@ -111,10 +111,9 @@ class FotoJazzProcessShellRun():
             if fjp.files_processed_count < fjp.total_file_count:
                 print fjp.get_progress()
 
-        if fjp.files_processed_count == fjp.total_file_count:
-            print fjp.get_progress()
-            print '%s threaded process complete. Now exiting.' \
-                  % fjp.__class__.__name__
+        print fjp.get_progress()
+        print '%s threaded process complete. Now exiting.' \
+              % fjp.__class__.__name__
 
 
 if __name__ == '__main__':
