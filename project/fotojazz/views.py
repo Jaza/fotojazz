@@ -60,8 +60,10 @@ def process_start(process_class_name):
             just started)."""
     
     filenames_input = request.args.get('filenames_input', '', type=str)
-    process_module_name = process_class_name.replace('Process', '') \
-                                            .lower()
+    process_module_name = process_class_name
+    if process_class_name != 'FotoJazzProcess':
+        process_module_name = process_module_name.replace('Process', '')
+    process_module_name = process_module_name.lower()
     
     # Dynamically import the class / module for the particular process
     # being started. This saves needing to import all possible
