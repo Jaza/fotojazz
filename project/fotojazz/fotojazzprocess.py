@@ -76,7 +76,7 @@ class FotoJazzProcess(Thread):
                                       self.percent_done())
 
 
-class FotoJazzProcessShellRun():
+class FotoJazzProcessShellRun(object):
     """Runs an instance of the thread with shell output / feedback."""
     
     def __init__(self, init_class=FotoJazzProcess):
