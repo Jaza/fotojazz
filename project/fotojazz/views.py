@@ -144,7 +144,7 @@ def process_progress(process_class_name):
 @mod.route('/favicon.ico')
 def favicon():
     """Renders the favicon."""
-    return send_from_directory(os.path.join(app.root_path, 'static'),
+    return send_from_directory(path.join(app.root_path, 'static'),
                                'favicon.ico')
 
 
