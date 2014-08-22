@@ -1,5 +1,5 @@
 from datetime import datetime
-import Image
+from PIL import Image
 from os import path, stat
 import pyexiv2
 from stat import ST_MTIME, ST_SIZE
@@ -19,7 +19,7 @@ def get_thumb_metadata(filename, thumb_resize_width, thumb_resize_height, checke
     '''For the given image and its requested thumbnail size, returns
     a dictionary of metadata needed to display the image as a
     thumbnail.'''
-    
+
     img = Image.open(filename)
     width, height = img.size
     ratio = 1.0 * width / height
@@ -27,7 +27,7 @@ def get_thumb_metadata(filename, thumb_resize_width, thumb_resize_height, checke
     thumb_height = thumb_resize_height
     top_offset = 0
     left_offset = 0
-    
+
     if ratio > 1.0:
         thumb_width = thumb_resize_width
         thumb_height = thumb_resize_height * (1.0 / ratio)
@@ -36,14 +36,14 @@ def get_thumb_metadata(filename, thumb_resize_width, thumb_resize_height, checke
         thumb_width = thumb_resize_width * ratio
         thumb_height = thumb_resize_height
         left_offset = int((thumb_resize_width - thumb_width) / 2)
-    
+
     statinfo = stat(filename)
-    
+
     metadata = pyexiv2.ImageMetadata(filename)
     metadata.read()
     date_taken = metadata['Exif.Photo.DateTimeOriginal'].value
     orientation = metadata['Exif.Image.Orientation'].value
-    
+
     return {'fullname': filename,
             'thumb_width': int(thumb_width),
             'thumb_height': int(thumb_height),
@@ -57,4 +57,3 @@ def get_thumb_metadata(filename, thumb_resize_width, thumb_resize_height, checke
             'date_modified_timestamp': statinfo[ST_MTIME],
             'date_modified': datetime.fromtimestamp(statinfo[ST_MTIME]),
             'orientation': orientation}
-

@@ -1,4 +1,4 @@
-import Image
+from PIL import Image
 from StringIO import StringIO
 
 
@@ -7,7 +7,7 @@ def resize(file, width, height, crop, quality=75):
     http://flask.pocoo.org/mailinglist/ \
     archive/2011/1/26/pil-to-create-thumbnails- \
     automatically-using-tag/#32aff91e05ba9985a49a76a4fb5338d7
-    
+
     Downsample the image.
 
     script example :
@@ -25,7 +25,7 @@ def resize(file, width, height, crop, quality=75):
     @param height: the height of the result image
     @param crop: boolean - crop the image to fill the box
     @param quality: quality of the result image
-    
+
     @return out: file-like-object - save the image into the output stream
     '''
     img = Image.open(file)
@@ -57,5 +57,5 @@ def resize(file, width, height, crop, quality=75):
     # Save it into a file-like object
     out = StringIO()
     img.save(out, "JPEG", quality=75)
-    
+
     return out
