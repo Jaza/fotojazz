@@ -41,7 +41,12 @@ def get_thumb_metadata(filename, thumb_resize_width, thumb_resize_height, checke
 
     metadata = pyexiv2.ImageMetadata(filename)
     metadata.read()
-    date_taken = metadata['Exif.Photo.DateTimeOriginal'].value
+
+    try:
+        date_taken = metadata['Exif.Photo.DateTimeOriginal'].value
+    except KeyError:
+        date_taken = None
+
     orientation = metadata['Exif.Image.Orientation'].value
 
     return {'fullname': filename,
@@ -52,7 +57,7 @@ def get_thumb_metadata(filename, thumb_resize_width, thumb_resize_height, checke
             'checked': checked,
             'filename': path.basename(filename),
             'filesize': statinfo[ST_SIZE],
-            'date_taken_timestamp': mktime(date_taken.timetuple()),
+            'date_taken_timestamp': date_taken and mktime(date_taken.timetuple()) or None,
             'date_taken': date_taken,
             'date_modified_timestamp': statinfo[ST_MTIME],
             'date_modified': datetime.fromtimestamp(statinfo[ST_MTIME]),
