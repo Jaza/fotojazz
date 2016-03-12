@@ -47,7 +47,10 @@ def get_thumb_metadata(filename, thumb_resize_width, thumb_resize_height, checke
     except KeyError:
         date_taken = None
 
-    orientation = metadata['Exif.Image.Orientation'].value
+    try:
+        orientation = metadata['Exif.Image.Orientation'].value
+    except KeyError:
+        orientation = None
 
     return {'fullname': filename,
             'thumb_width': int(thumb_width),
